@@ -34,18 +34,18 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            height: 100vh; /* Fixed viewport height */
-            overflow: hidden; /* Prevent scrolling */
+            /* Center the entire app block vertically */
+            justify-content: center; 
+            height: 100vh; 
+            overflow: hidden; 
         }
 
         header {
             width: 100%;
             max-width: 600px;
-            /* Reduced bottom padding significantly */
             padding: 10px 20px 0px 20px; 
             text-align: center;
             flex-shrink: 0;
-            border-bottom: none;
         }
 
         /* Title Grouping */
@@ -67,8 +67,7 @@
         /* Line 3: Biology@RI */
         .school-branding {
             font-size: 0.7rem; 
-            /* Intensity reduced by 50% (0.8 -> 0.4 alpha) */
-            color: rgba(15, 23, 42, 0.4); 
+            color: rgba(15, 23, 42, 0.4); /* 50% lighter intensity */
             margin-top: 2px;
             font-weight: 600;
         }
@@ -79,9 +78,9 @@
             padding: 0 15px;
             display: flex;
             flex-direction: column;
-            /* Gap reduced to pull canvas up */
             gap: 4px; 
-            flex-grow: 1;
+            /* Stop main from growing excessively to keep footer close */
+            flex-grow: 0; 
             justify-content: center;
         }
 
@@ -109,7 +108,8 @@
         /* Controls */
         .controls {
             background: var(--surface);
-            padding: 12px;
+            /* Reduced bottom padding to bring reset button closer to edge */
+            padding: 10px 10px 4px 10px; 
             border-radius: var(--radius);
             border: 1px solid var(--border);
             flex-shrink: 0;
@@ -188,7 +188,8 @@
             display: block;
             width: auto;
             min-width: 100px;
-            margin: 10px auto 0 auto;
+            /* Reduced margin-top */
+            margin: 8px auto 0 auto; 
             padding: 8px 16px;
             background: #e2e8f0;
             color: var(--text-main);
@@ -201,8 +202,8 @@
 
         footer {
             flex-shrink: 0;
-            /* Reduced top padding */
-            padding: 2px 15px 10px 15px; 
+            /* Removed top padding, reduced bottom padding */
+            padding: 0px 15px 5px 15px; 
             text-align: center;
             font-size: 0.65rem;
             color: var(--text-muted);
@@ -528,7 +529,7 @@
             ctx.fillStyle = '#10b981';
             ctx.beginPath();
             
-            // INCREASED ARROW SIZE by 75% (4 * 1.75 = 7)
+            // INCREASED ARROW SIZE by 75% (7px)
             const arrowSize = 7;
             
             ctx.moveTo(f.currentX + (f.direction * arrowSize), y);
@@ -538,21 +539,19 @@
         });
 
         // 4. Labels (3' and 5')
-        // PLACEMENT: Within the helix, closer to template
+        // PLACEMENT: Within the helix, closer to template (Offset 10)
         ctx.fillStyle = '#64748b';
         ctx.font = 'bold 12px monospace';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
 
-        // Distance "inside" the strand lines.
-        // Reduced from 18 to 10 to move closer to the template lines.
         const lblOffset = 10; 
 
-        // Top Strand: Just below top line
+        // Top Strand
         ctx.fillText("3'", 30, topY + lblOffset);
         ctx.fillText("5'", width - 30, topY + lblOffset); 
 
-        // Bottom Strand: Just above bottom line
+        // Bottom Strand
         ctx.fillText("5'", 30, bottomY - lblOffset);
         ctx.fillText("3'", width - 30, bottomY - lblOffset);
     }
