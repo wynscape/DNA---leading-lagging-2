@@ -41,37 +41,33 @@
         header {
             width: 100%;
             max-width: 600px;
-            padding: 10px 20px 5px 20px; /* Reduced bottom padding */
+            padding: 10px 20px 2px 20px; /* Greatly reduced bottom padding */
             text-align: center;
             flex-shrink: 0;
             border-bottom: none;
         }
 
-        /* Line 1: DNA and Genomics */
-        h1 {
-            font-size: 1.2rem; 
+        /* Title Grouping */
+        .title-group {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        /* Line 1 & 2: Same size now */
+        h1, .main-title {
+            font-size: 1.4rem; 
             font-weight: 700;
             margin: 0;
             line-height: 1.2;
             color: var(--text-main);
         }
 
-        /* Line 2: DNA Replication (Enlarged 50% from previous 0.9rem -> ~1.4rem) */
-        .main-title {
-            font-size: 1.4rem; 
-            color: var(--text-main);
-            margin-top: 2px;
-            font-weight: 700;
-            line-height: 1.2;
-        }
-
-        /* Line 3: Biology@RI (50% of H1 size, 80% intensity) */
+        /* Line 3: Biology@RI */
         .school-branding {
-            font-size: 0.6rem; /* 50% of 1.2rem */
-            color: rgba(15, 23, 42, 0.8); /* 80% intensity of #0f172a */
-            margin-top: 4px;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
+            font-size: 0.7rem; 
+            color: rgba(15, 23, 42, 0.8); /* 80% intensity */
+            margin-top: 2px;
             font-weight: 600;
         }
 
@@ -81,12 +77,12 @@
             padding: 0 15px;
             display: flex;
             flex-direction: column;
-            gap: 10px; /* Reduced gap */
+            gap: 5px; /* Reduced gap between header and canvas */
             flex-grow: 1;
             justify-content: center;
         }
 
-        /* Canvas Area - Reduced height by 30% (300px -> 210px) */
+        /* Canvas Area */
         .canvas-wrapper {
             background: var(--surface);
             border-radius: var(--radius);
@@ -97,7 +93,7 @@
             touch-action: none;
             width: 100%;
             height: 210px; 
-            flex-shrink: 0; /* Prevent crushing */
+            flex-shrink: 0; 
         }
 
         canvas {
@@ -117,7 +113,7 @@
         }
 
         .slider-container {
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
 
         .slider-label {
@@ -215,9 +211,9 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: rgba(0,0,0,0.8);
+            background: rgba(0,0,0,0.85);
             color: white;
-            padding: 8px 16px;
+            padding: 10px 16px;
             border-radius: 6px;
             font-size: 0.8rem;
             pointer-events: none;
@@ -225,6 +221,7 @@
             transition: opacity 0.3s;
             text-align: center;
             white-space: nowrap;
+            z-index: 100;
         }
         .feedback-toast.show { opacity: 1; }
 
@@ -233,8 +230,10 @@
 <body class="no-select">
 
 <header>
-    <h1>DNA and Genomics</h1>
-    <div class="main-title">DNA Replication</div>
+    <div class="title-group">
+        <h1>DNA and Genomics</h1>
+        <div class="main-title">DNA Replication</div>
+    </div>
     <div class="school-branding">Biology@RI</div>
 </header>
 
@@ -292,7 +291,7 @@
 
     // Graphics Settings
     let width, height;
-    const STRAND_GAP = 90; // Reduced gap slightly to fit new height
+    const STRAND_GAP = 90; 
     
     // Game State
     let forkProgress = 0.1; 
@@ -329,7 +328,7 @@
         const topY = height/2 - STRAND_GAP/2;
         const bottomY = height/2 + STRAND_GAP/2;
         
-        const tol = 35; // Increased touch tolerance slightly
+        const tol = 35; 
 
         if (clickX < forkX) {
             if (Math.abs(clickY - topY) < tol) {
@@ -353,7 +352,8 @@
         if (strand === 'top') {
             const existing = fragments.find(f => f.strand === 'top');
             if (existing) {
-                showToast("Already primed!");
+                // CHANGED: Specific biological feedback
+                showToast("Nucleotides cannot be added from 5' end");
             } else {
                 if (x < forkX) {
                     addFragment('top', x, 1); 
@@ -387,7 +387,7 @@
     function showToast(msg) {
         toast.innerText = msg;
         toast.classList.add('show');
-        setTimeout(() => toast.classList.remove('show'), 2000);
+        setTimeout(() => toast.classList.remove('show'), 2500);
     }
 
     function updateInstructions() {
@@ -532,18 +532,24 @@
         });
 
         // 4. Labels (3' and 5')
+        // PLACEMENT: Within the helix (Inside the gap)
         ctx.fillStyle = '#64748b';
         ctx.font = 'bold 12px monospace';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
 
-        const lblOffset = 12;
+        // Distance "inside" the strand lines
+        const lblOffset = 18; 
 
-        ctx.fillText("3'", 30, topY - lblOffset);
-        ctx.fillText("5'", width - 30, topY - lblOffset);
+        // Top Strand: Template runs 3' -> 5'. 
+        // We place labels just below the top blue line.
+        ctx.fillText("3'", 30, topY + lblOffset);
+        ctx.fillText("5'", width - 30, topY + lblOffset); // Approximation for coiled part
 
-        ctx.fillText("5'", 30, bottomY + lblOffset);
-        ctx.fillText("3'", width - 30, bottomY + lblOffset);
+        // Bottom Strand: Template runs 5' -> 3'.
+        // We place labels just above the bottom blue line.
+        ctx.fillText("5'", 30, bottomY - lblOffset);
+        ctx.fillText("3'", width - 30, bottomY - lblOffset);
     }
 
     function loop() {
