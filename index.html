@@ -17,7 +17,7 @@
             --text-muted: #64748b;
             --border: #e2e8f0;
             --radius: 12px;
-            --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            --shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         }
 
         * {
@@ -34,30 +34,45 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            height: 100vh; /* Fixed height for mobile app feel */
-            overflow: hidden;
+            height: 100vh; /* Fixed viewport height */
+            overflow: hidden; /* Prevent scrolling */
         }
 
         header {
             width: 100%;
             max-width: 600px;
-            padding: 15px 20px;
+            padding: 10px 20px 5px 20px; /* Reduced bottom padding */
             text-align: center;
             flex-shrink: 0;
+            border-bottom: none;
         }
 
+        /* Line 1: DNA and Genomics */
         h1 {
-            font-size: 1.2rem;
+            font-size: 1.2rem; 
             font-weight: 700;
             margin: 0;
             line-height: 1.2;
+            color: var(--text-main);
         }
 
-        .subtitle {
-            font-size: 0.9rem;
-            color: var(--text-muted);
+        /* Line 2: DNA Replication (Enlarged 50% from previous 0.9rem -> ~1.4rem) */
+        .main-title {
+            font-size: 1.4rem; 
+            color: var(--text-main);
             margin-top: 2px;
-            font-weight: 500;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        /* Line 3: Biology@RI (50% of H1 size, 80% intensity) */
+        .school-branding {
+            font-size: 0.6rem; /* 50% of 1.2rem */
+            color: rgba(15, 23, 42, 0.8); /* 80% intensity of #0f172a */
+            margin-top: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 600;
         }
 
         main {
@@ -66,12 +81,12 @@
             padding: 0 15px;
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 10px; /* Reduced gap */
             flex-grow: 1;
             justify-content: center;
         }
 
-        /* Canvas Area */
+        /* Canvas Area - Reduced height by 30% (300px -> 210px) */
         .canvas-wrapper {
             background: var(--surface);
             border-radius: var(--radius);
@@ -81,7 +96,8 @@
             overflow: hidden;
             touch-action: none;
             width: 100%;
-            height: 300px; /* Fixed height for consistency */
+            height: 210px; 
+            flex-shrink: 0; /* Prevent crushing */
         }
 
         canvas {
@@ -94,21 +110,21 @@
         /* Controls */
         .controls {
             background: var(--surface);
-            padding: 15px;
+            padding: 12px;
             border-radius: var(--radius);
             border: 1px solid var(--border);
             flex-shrink: 0;
         }
 
         .slider-container {
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
 
         .slider-label {
             display: block;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             font-weight: 600;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             color: var(--text-main);
         }
 
@@ -117,13 +133,10 @@
             width: 100%;
             -webkit-appearance: none;
             background: transparent;
+            margin: 0;
         }
-
-        input[type=range]:focus {
-            outline: none;
-        }
-
-        /* Track */
+        input[type=range]:focus { outline: none; }
+        
         input[type=range]::-webkit-slider-runnable-track {
             width: 100%;
             height: 4px;
@@ -132,79 +145,66 @@
             border-radius: 2px;
         }
         
-        /* Thumb - Triangle Shape */
         input[type=range]::-webkit-slider-thumb {
             -webkit-appearance: none;
-            height: 24px;
-            width: 20px;
+            height: 20px;
+            width: 16px;
             background: var(--helicase);
             cursor: pointer;
-            margin-top: -10px; /* Centers thumb on track */
-            /* Create Triangle pointing right */
+            margin-top: -8px; 
             clip-path: polygon(0 0, 0 100%, 100% 50%); 
-            border: none;
-            box-shadow: none;
         }
 
-        /* Firefox Support */
-        input[type=range]::-moz-range-thumb {
-            height: 24px;
-            width: 20px;
-            background: var(--helicase);
-            cursor: pointer;
-            border: none;
-            clip-path: polygon(0 0, 0 100%, 100% 50%);
-        }
-
+        /* Explanation Box */
         .instruction-box {
             background: #f1f5f9; /* Grey reduced intensity */
             border: 1px solid #e2e8f0;
-            padding: 12px;
+            padding: 10px;
             border-radius: 8px;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: #475569;
             text-align: center;
-            min-height: 40px;
+            min-height: 36px;
             display: flex;
             align-items: center;
             justify-content: center;
+            line-height: 1.3;
         }
 
+        /* Key / Legend */
         .legend {
             display: flex;
             flex-wrap: wrap;
-            gap: 12px;
-            font-size: 0.75rem;
+            gap: 10px;
+            font-size: 0.7rem;
             color: var(--text-muted);
             justify-content: center;
-            margin-top: 15px;
+            margin-top: 10px;
         }
-        .legend-item { display: flex; align-items: center; gap: 6px; }
-        /* Squares for key */
+        .legend-item { display: flex; align-items: center; gap: 5px; }
         .square { width: 10px; height: 10px; border-radius: 2px; }
 
+        /* Reset Button */
         button.reset {
             display: block;
             width: auto;
-            min-width: 120px;
-            margin: 15px auto 0 auto;
-            padding: 10px 20px;
-            background: #e2e8f0; /* Light grey box */
+            min-width: 100px;
+            margin: 10px auto 0 auto;
+            padding: 8px 16px;
+            background: #e2e8f0;
             color: var(--text-main);
             border: none;
-            border-radius: 8px;
+            border-radius: 6px;
             font-weight: 600;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             cursor: pointer;
-            transition: background 0.2s;
         }
-        button.reset:active { background: #cbd5e1; }
 
         footer {
-            margin-top: auto;
-            padding: 15px;
+            flex-shrink: 0;
+            padding: 10px 15px;
             text-align: center;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             color: var(--text-muted);
             width: 100%;
         }
@@ -215,15 +215,16 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: rgba(0,0,0,0.75);
+            background: rgba(0,0,0,0.8);
             color: white;
             padding: 8px 16px;
             border-radius: 6px;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             pointer-events: none;
             opacity: 0;
             transition: opacity 0.3s;
             text-align: center;
+            white-space: nowrap;
         }
         .feedback-toast.show { opacity: 1; }
 
@@ -233,7 +234,8 @@
 
 <header>
     <h1>DNA and Genomics</h1>
-    <div class="subtitle">DNA Replication</div>
+    <div class="main-title">DNA Replication</div>
+    <div class="school-branding">Biology@RI</div>
 </header>
 
 <main>
@@ -290,15 +292,14 @@
 
     // Graphics Settings
     let width, height;
-    const STRAND_GAP = 100; // Vertical distance between unzipped strands
+    const STRAND_GAP = 90; // Reduced gap slightly to fit new height
     
     // Game State
-    let forkProgress = 0.1; // 0.0 to 1.0 (Percentage of canvas width unzipped)
+    let forkProgress = 0.1; 
     let fragments = []; 
     
     function resize() {
         const dpr = window.devicePixelRatio || 1;
-        // Use container dimensions
         const wrapper = document.querySelector('.canvas-wrapper');
         width = wrapper.clientWidth;
         height = wrapper.clientHeight;
@@ -308,7 +309,6 @@
         ctx.scale(dpr, dpr);
     }
     
-    // Initial resize
     resize();
     window.addEventListener('resize', resize);
 
@@ -329,18 +329,12 @@
         const topY = height/2 - STRAND_GAP/2;
         const bottomY = height/2 + STRAND_GAP/2;
         
-        // Interaction Zone Tolerance
-        const tol = 30;
+        const tol = 35; // Increased touch tolerance slightly
 
-        // Check if click is in the unzipped region
         if (clickX < forkX) {
-            
-            // 1. Clicked Top Strand?
             if (Math.abs(clickY - topY) < tol) {
                 tryAddPrimer('top', clickX);
             }
-            
-            // 2. Clicked Bottom Strand?
             else if (Math.abs(clickY - bottomY) < tol) {
                 tryAddPrimer('bottom', clickX);
             }
@@ -350,7 +344,6 @@
     });
 
     function getForkX() {
-        // Map 0-100 slider to 10% - 90% of canvas width
         return width * (0.1 + (forkProgress * 0.8));
     }
 
@@ -359,24 +352,22 @@
 
         if (strand === 'top') {
             const existing = fragments.find(f => f.strand === 'top');
-            
             if (existing) {
                 showToast("Already primed!");
             } else {
                 if (x < forkX) {
-                    addFragment('top', x, 1); // Direction 1 (Right)
+                    addFragment('top', x, 1); 
                     showToast("Primer added!");
                 }
             }
         } 
         else if (strand === 'bottom') {
-            // Check overlaps
             const overlap = fragments.find(f => 
                 f.strand === 'bottom' && x <= f.startX && x >= f.currentX
             );
 
             if (!overlap) {
-                addFragment('bottom', x, -1); // Direction -1 (Left)
+                addFragment('bottom', x, -1); 
                 showToast("Primer added!");
             }
         }
@@ -385,8 +376,8 @@
     function addFragment(strand, startX, direction) {
         fragments.push({
             strand: strand,
-            startX: startX,      // Where primer sits
-            currentX: startX,    // Tip of the growing DNA
+            startX: startX,      
+            currentX: startX,    
             direction: direction,
             active: true
         });
@@ -401,9 +392,9 @@
 
     function updateInstructions() {
         if (fragments.length === 0) {
-            infoBox.innerText = "Use slider as helicase to unzip the DNA. Click strands to add primers.";
+            infoBox.innerText = "Use slider to shift position of helicase and unzip the DNA";
         } else {
-            infoBox.innerText = "Keep unzipping and adding primers to fill the gaps.";
+            infoBox.innerText = "Click strands to add primers and fill the gaps.";
         }
     }
 
@@ -416,7 +407,7 @@
         fragments.forEach(f => {
             if (!f.active) return;
 
-            // Synthesis Speed (Reduced by 50% from previous 2 to 1)
+            // Synthesis Speed (Slow)
             const speed = 1; 
 
             if (f.direction === 1) { 
@@ -428,7 +419,6 @@
                 // Bottom -> Grows Left
                 let blocked = false;
                 
-                // Collision with previous fragment
                 const neighbor = fragments.find(n => 
                     n.strand === 'bottom' && n !== f && Math.abs(n.startX - f.currentX) < 4
                 );
@@ -458,19 +448,19 @@
         ctx.lineWidth = 4;
         ctx.lineCap = 'round';
 
-        // Top Strand (Single)
+        // Top Strand
         ctx.beginPath();
         ctx.moveTo(20, topY);
         ctx.lineTo(forkX, topY);
         ctx.stroke();
 
-        // Bottom Strand (Single)
+        // Bottom Strand
         ctx.beginPath();
         ctx.moveTo(20, bottomY);
         ctx.lineTo(forkX, bottomY);
         ctx.stroke();
 
-        // Double Helix (Right side)
+        // Helix
         ctx.beginPath();
         ctx.moveTo(forkX, topY);
         for (let x = forkX; x < width; x+=5) {
@@ -489,7 +479,7 @@
         }
         ctx.stroke();
 
-        // Draw Base Pairs
+        // Base Pairs
         ctx.lineWidth = 1;
         ctx.strokeStyle = '#cbd5e1';
         for (let x = forkX + 10; x < width; x+=15) {
@@ -502,20 +492,19 @@
             ctx.stroke();
         }
 
-        // 2. Draw Helicase (Triangle Wedge on Canvas)
-        ctx.fillStyle = '#64748b'; // Grey
+        // 2. Helicase
+        ctx.fillStyle = '#64748b'; 
         ctx.beginPath();
         ctx.moveTo(forkX, topY);
         ctx.lineTo(forkX + 20, centerY);
         ctx.lineTo(forkX, bottomY);
         ctx.fill();
 
-        // 3. Draw Fragments (New DNA)
+        // 3. Fragments
         fragments.forEach(f => {
             const y = f.strand === 'top' ? topY - 10 : bottomY + 10; 
-            const primerLen = 20;
             
-            // Draw Primer (Orange)
+            // Primer (Orange)
             ctx.strokeStyle = '#f97316'; 
             ctx.lineWidth = 6;
             ctx.beginPath();
@@ -523,45 +512,36 @@
             ctx.lineTo(f.startX + (f.direction * 15), y); 
             ctx.stroke();
 
-            // Draw DNA Part (Green)
+            // DNA (Green)
             if (Math.abs(f.currentX - f.startX) > 15) {
-                ctx.strokeStyle = '#10b981'; // Green
+                ctx.strokeStyle = '#10b981'; 
                 ctx.beginPath();
                 ctx.moveTo(f.startX + (f.direction * 15), y);
                 ctx.lineTo(f.currentX, y);
                 ctx.stroke();
             }
 
-            // Draw Permanent Direction Arrow (Triangle)
+            // Direction Arrow (Triangle)
             ctx.fillStyle = '#10b981';
             ctx.beginPath();
-            // Arrowhead logic
             const arrowSize = 4;
-            // Point of arrow
             ctx.moveTo(f.currentX + (f.direction * arrowSize), y);
-            // Top back
             ctx.lineTo(f.currentX - (f.direction * arrowSize), y - arrowSize);
-            // Bottom back
             ctx.lineTo(f.currentX - (f.direction * arrowSize), y + arrowSize);
             ctx.fill();
         });
 
-        // 4. Draw Labels (3' and 5') close to template
+        // 4. Labels (3' and 5')
         ctx.fillStyle = '#64748b';
         ctx.font = 'bold 12px monospace';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
 
-        // Gap from line (Very close)
         const lblOffset = 12;
 
-        // Top Strand (3' Left, 5' Right)
         ctx.fillText("3'", 30, topY - lblOffset);
-        // Calculate Right side roughly based on current helix
-        // For simplicity, we just label the left ends clearly as that's where interaction starts
         ctx.fillText("5'", width - 30, topY - lblOffset);
 
-        // Bottom Strand (5' Left, 3' Right)
         ctx.fillText("5'", 30, bottomY + lblOffset);
         ctx.fillText("3'", width - 30, bottomY + lblOffset);
     }
@@ -572,9 +552,6 @@
         requestAnimationFrame(loop);
     }
 
-    /**
-     * INITIALIZATION
-     */
     document.getElementById('resetBtn').addEventListener('click', () => {
         fragments = [];
         slider.value = 10;
