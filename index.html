@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>DNA and Genomics | Wynscape</title>
+    <title>DNA and Genomics | DNA Replication </title>
     <style>
         :root {
             --primary: #2563eb;       /* Blue - Template DNA */
@@ -34,8 +34,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            /* Center the entire app block vertically */
-            justify-content: center; 
+            justify-content: flex-start; /* Aligns content to top */
             height: 100vh; 
             overflow: hidden; 
         }
@@ -43,6 +42,7 @@
         header {
             width: 100%;
             max-width: 600px;
+            /* Minimal top padding to sit close to margin */
             padding: 10px 20px 0px 20px; 
             text-align: center;
             flex-shrink: 0;
@@ -67,7 +67,7 @@
         /* Line 3: Biology@RI */
         .school-branding {
             font-size: 0.7rem; 
-            color: rgba(15, 23, 42, 0.4); /* 50% lighter intensity */
+            color: rgba(15, 23, 42, 0.4); 
             margin-top: 2px;
             font-weight: 600;
         }
@@ -78,13 +78,13 @@
             padding: 0 15px;
             display: flex;
             flex-direction: column;
-            gap: 4px; 
-            /* Stop main from growing excessively to keep footer close */
-            flex-grow: 0; 
-            justify-content: center;
+            gap: 8px; 
+            /* Main takes available space to push footer down */
+            flex-grow: 1; 
+            justify-content: center; /* Center canvas/controls vertically in the middle space */
         }
 
-        /* Canvas Area */
+        /* Canvas Area - Height Increased to 275px */
         .canvas-wrapper {
             background: var(--surface);
             border-radius: var(--radius);
@@ -94,7 +94,7 @@
             overflow: hidden;
             touch-action: none;
             width: 100%;
-            height: 210px; 
+            height: 275px; 
             flex-shrink: 0; 
         }
 
@@ -108,7 +108,6 @@
         /* Controls */
         .controls {
             background: var(--surface);
-            /* Reduced bottom padding to bring reset button closer to edge */
             padding: 10px 10px 4px 10px; 
             border-radius: var(--radius);
             border: 1px solid var(--border);
@@ -163,11 +162,12 @@
             font-size: 0.8rem;
             color: #475569;
             text-align: center;
-            min-height: 36px;
+            min-height: 45px;
             display: flex;
+            flex-direction: column; /* Stack lines */
             align-items: center;
             justify-content: center;
-            line-height: 1.3;
+            line-height: 1.4;
         }
 
         /* Key / Legend */
@@ -188,7 +188,6 @@
             display: block;
             width: auto;
             min-width: 100px;
-            /* Reduced margin-top */
             margin: 8px auto 0 auto; 
             padding: 8px 16px;
             background: #e2e8f0;
@@ -202,8 +201,9 @@
 
         footer {
             flex-shrink: 0;
-            /* Removed top padding, reduced bottom padding */
-            padding: 0px 15px 5px 15px; 
+            /* Pushed to bottom via flex-grow on Main */
+            margin-top: auto; 
+            padding: 10px 15px 15px 15px; 
             text-align: center;
             font-size: 0.65rem;
             color: var(--text-muted);
@@ -251,11 +251,12 @@
     <div class="controls">
         <div class="slider-container">
             <span class="slider-label">Helicase position</span>
-            <input type="range" id="helicaseSlider" min="0" max="100" value="10" step="0.5">
+            <input type="range" id="helicaseSlider" min="0" max="100" value="0" step="0.5">
         </div>
 
         <div class="instruction-box" id="instructionText">
-            Use slider to shift position of helicase and unzip the DNA
+            <span>Use slider to shift position of helicase and unzip the DNA</span>
+            <span>Tap on template DNA to synthesise daughter strands</span>
         </div>
 
         <div class="legend">
@@ -291,15 +292,14 @@
     const canvas = document.getElementById('dnaCanvas');
     const ctx = canvas.getContext('2d');
     const slider = document.getElementById('helicaseSlider');
-    const infoBox = document.getElementById('instructionText');
     const toast = document.getElementById('toast');
 
     // Graphics Settings
     let width, height;
-    const STRAND_GAP = 90; 
+    const STRAND_GAP = 120; // Increased slightly for larger canvas
     
     // Game State
-    let forkProgress = 0.1; 
+    let forkProgress = 0.0; // Starts at 0 now
     let fragments = []; 
     
     function resize() {
@@ -321,7 +321,6 @@
      */
     slider.addEventListener('input', (e) => {
         forkProgress = parseInt(e.target.value) / 100;
-        updateInstructions();
     });
 
     canvas.addEventListener('click', (e) => {
@@ -348,6 +347,8 @@
     });
 
     function getForkX() {
+        // Map 0-100 slider to 10% - 90% of canvas width
+        // If slider is 0, forkX should be small
         return width * (0.1 + (forkProgress * 0.8));
     }
 
@@ -385,21 +386,12 @@
             direction: direction,
             active: true
         });
-        updateInstructions();
     }
 
     function showToast(msg) {
         toast.innerText = msg;
         toast.classList.add('show');
         setTimeout(() => toast.classList.remove('show'), 2500);
-    }
-
-    function updateInstructions() {
-        if (fragments.length === 0) {
-            infoBox.innerText = "Use slider to shift position of helicase and unzip the DNA";
-        } else {
-            infoBox.innerText = "Click strands to add primers and fill the gaps.";
-        }
     }
 
     /**
@@ -411,7 +403,7 @@
         fragments.forEach(f => {
             if (!f.active) return;
 
-            // Synthesis Speed (Slow)
+            // Synthesis Speed
             const speed = 1; 
 
             if (f.direction === 1) { 
@@ -564,9 +556,8 @@
 
     document.getElementById('resetBtn').addEventListener('click', () => {
         fragments = [];
-        slider.value = 10;
-        forkProgress = 0.1;
-        updateInstructions();
+        slider.value = 0;
+        forkProgress = 0.0;
     });
 
     loop();
